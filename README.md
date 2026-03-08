@@ -240,6 +240,38 @@ Authenticated file manager routes (see `routes/web.php`):
 
 ## Project Images
 
+### App Screenshots
+
+Place your three screenshots in `docs/screenshots/` with these names:
+
+- `docs/screenshots/my-files-list.png`
+- `docs/screenshots/my-files-folder.png`
+- `docs/screenshots/trash-view.png`
+
+Then use this Markdown:
+
+```markdown
+![My Files - List View](docs/screenshots/my-files-list.png)
+![My Files - Folder View](docs/screenshots/my-files-folder.png)
+![Trash View](docs/screenshots/trash-view.png)
+```
+
+Optional (smaller preview size using HTML):
+
+```html
+<p>
+	<img src="docs/screenshots/my-files-list.png" alt="My Files - List View" width="900" />
+</p>
+<p>
+	<img src="docs/screenshots/my-files-folder.png" alt="My Files - Folder View" width="900" />
+</p>
+<p>
+	<img src="docs/screenshots/trash-view.png" alt="Trash View" width="900" />
+</p>
+```
+
+### File Type Icons
+
 Current repository image assets (file-type icons):
 
 | Icon | Preview |
@@ -253,8 +285,6 @@ Current repository image assets (file-type icons):
 | Video | ![Video](public/images/icon/video.png) |
 | Word | ![Word](public/images/icon/word.png) |
 | ZIP | ![ZIP](public/images/icon/zip.png) |
-
-If you want UI screenshots (dashboard, file list, share modal, trash, etc.) displayed in this README, add image files under a folder like `docs/screenshots/` and reference them in this section.
 
 ## Testing
 
