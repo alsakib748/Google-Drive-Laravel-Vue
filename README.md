@@ -240,35 +240,36 @@ Authenticated file manager routes (see `routes/web.php`):
 
 ## Project Images
 
-### App Screenshots
+<div align="center">
+	<h3>Application Screenshots</h3>
+	<p><em>Main file manager views from the Laravel + Vue app</em></p>
+</div>
 
-Place your three screenshots in `docs/screenshots/` with these names:
+<table>
+	<tr>
+		<td align="center" width="50%">
+			<b>Home</b><br/>
+			<a href="screenshots/home.png">
+				<img src="screenshots/home.png" alt="My Files - List View" width="100%" />
+			</a>
+		</td>
+		<td align="center" width="50%">
+			<b>Inside Folder</b><br/>
+			<a href="screenshots/home_inside_folder.png">
+				<img src="screenshots/home_inside_folder.png" alt="My Files - Folder View" width="100%" />
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2">
+			<b>Trash</b><br/>
+			<a href="screenshots/trash.png">
+				<img src="screenshots/trash.png" alt="Trash View" width="85%" />
+			</a>
+		</td>
+	</tr>
+</table>
 
-- `docs/screenshots/my-files-list.png`
-- `docs/screenshots/my-files-folder.png`
-- `docs/screenshots/trash-view.png`
-
-Then use this Markdown:
-
-```markdown
-![My Files - List View](docs/screenshots/my-files-list.png)
-![My Files - Folder View](docs/screenshots/my-files-folder.png)
-![Trash View](docs/screenshots/trash-view.png)
-```
-
-Optional (smaller preview size using HTML):
-
-```html
-<p>
-	<img src="docs/screenshots/my-files-list.png" alt="My Files - List View" width="900" />
-</p>
-<p>
-	<img src="docs/screenshots/my-files-folder.png" alt="My Files - Folder View" width="900" />
-</p>
-<p>
-	<img src="docs/screenshots/trash-view.png" alt="Trash View" width="900" />
-</p>
-```
 
 ### File Type Icons
 
