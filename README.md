@@ -1,66 +1,287 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Google Drive Clone (Laravel + Vue)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A full-stack file management application inspired by Google Drive, built with Laravel 10, Vue 3, Inertia.js, and Tailwind CSS.
 
-## About Laravel
+This project supports file and folder uploads, nested directories, trash and restore, favorites, sharing by email, and downloads (single or zip). It also includes asynchronous cloud upload support via queue jobs.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table Of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. [Features](#features)
+2. [Tech Stack](#tech-stack)
+3. [Project Architecture](#project-architecture)
+4. [Prerequisites](#prerequisites)
+5. [Installation (Local)](#installation-local)
+6. [Installation (Docker / Laravel Sail)](#installation-docker--laravel-sail)
+7. [Environment Variables](#environment-variables)
+8. [Run The Application](#run-the-application)
+9. [Queue, Mail, And Cloud Upload Notes](#queue-mail-and-cloud-upload-notes)
+10. [Main Routes](#main-routes)
+11. [Project Images](#project-images)
+12. [Testing](#testing)
+13. [Troubleshooting](#troubleshooting)
+14. [License](#license)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+- Authentication and profile management (Laravel Breeze + Inertia)
+- Personal root storage per user
+- File and folder upload support
+- Nested folder tree structure using `kalnoy/nestedset`
+- Duplicate prevention for files/folders in the same directory
+- Search within file listings
+- Soft delete to trash
+- Restore from trash
+- Permanent delete from trash
+- Favorites (starred files)
+- Share files/folders by email with notifications
+- Shared with me / shared by me views
+- Download single file or batch download as zip
+- Optional cloud upload flow (S3 disk) via queued job
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Backend: Laravel 10, PHP 8.1+
+- Frontend: Vue 3, Inertia.js, Tailwind CSS, Vite
+- Database: MySQL 8
+- Queue: Laravel Queue (`sync`, `database`, `redis`, etc.)
+- Storage: Local disk and S3-compatible cloud disk
+- Mail: SMTP (Mailpit-ready for local Docker setup)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Project Architecture
 
-## Laravel Sponsors
+- `app/Http/Controllers/FileController.php`: core file/folder logic
+- `app/Models/File.php`: file tree model, ownership, sharing scopes, soft deletes
+- `app/Jobs/UploadFileToCloudJob.php`: async cloud upload job
+- `app/Mail/ShareFilesMail.php`: sharing notification email
+- `resources/js/Pages/`: Inertia Vue pages (`MyFiles`, `Trash`, `SharedWithMe`, etc.)
+- `routes/web.php`: authenticated web routes for all file operations
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Prerequisites
 
-### Premium Partners
+- PHP `>= 8.1`
+- Composer
+- Node.js `>= 18` and npm
+- MySQL `>= 8`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Optional:
 
-## Contributing
+- Redis (if using `QUEUE_CONNECTION=redis`)
+- AWS S3 or S3-compatible storage (for cloud upload)
+- Docker Desktop (for Sail workflow)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Installation (Local)
 
-## Code of Conduct
+1. Clone repository:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/alsakib748/Google-Drive-Laravel-Vue.git
+cd Google-Drive-Laravel-Vue
+```
 
-## Security Vulnerabilities
+2. Install backend dependencies:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+```
+
+3. Install frontend dependencies:
+
+```bash
+npm install
+```
+
+4. Configure environment:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+5. Update `.env` database credentials, then run migrations:
+
+```bash
+php artisan migrate
+```
+
+6. Create storage symlink:
+
+```bash
+php artisan storage:link
+```
+
+7. Start development servers (in separate terminals):
+
+```bash
+php artisan serve
+```
+
+```bash
+npm run dev
+```
+
+Open `http://127.0.0.1:8000`.
+
+## Installation (Docker / Laravel Sail)
+
+1. Install dependencies:
+
+```bash
+composer install
+npm install
+```
+
+2. Prepare environment:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+3. Start containers:
+
+```bash
+./vendor/bin/sail up -d
+```
+
+4. Run setup inside Sail:
+
+```bash
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan storage:link
+```
+
+5. Run frontend watcher:
+
+```bash
+./vendor/bin/sail npm run dev
+```
+
+Default services in `docker-compose.yml` include `mysql`, `redis`, `mailpit`, `meilisearch`, and `selenium`.
+
+## Environment Variables
+
+Minimum variables to review in `.env`:
+
+```env
+APP_NAME="Google Drive Clone"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_file_manager
+DB_USERNAME=root
+DB_PASSWORD=
+
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=sync
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+```
+
+## Run The Application
+
+Development:
+
+```bash
+php artisan serve
+npm run dev
+```
+
+Production asset build:
+
+```bash
+npm run build
+```
+
+## Queue, Mail, And Cloud Upload Notes
+
+- Uploaded files are first stored locally.
+- `UploadFileToCloudJob` then attempts to upload to the configured cloud disk.
+- With `QUEUE_CONNECTION=sync`, upload runs immediately in-request.
+- For async background processing, set `QUEUE_CONNECTION=database` (or `redis`) and run:
+
+```bash
+php artisan queue:work
+```
+
+- Sharing triggers email notifications via `ShareFilesMail`. In Docker dev, Mailpit dashboard is exposed on port `8025` by default.
+
+## Main Routes
+
+Authenticated file manager routes (see `routes/web.php`):
+
+- `GET /my-files/{folder?}`: browse files
+- `GET /trash`: view trashed items
+- `POST /folder/create`: create folder
+- `POST /file`: upload files
+- `DELETE /file`: move to trash
+- `POST /file/restore`: restore trashed items
+- `DELETE /file/delete-forever`: permanently delete
+- `POST /file/add-to-favourites`: toggle favorite
+- `POST /file/share`: share items by email
+- `GET /shared-with-me`: items shared with current user
+- `GET /shared-by-me`: items shared by current user
+- `GET /file/download`: download selected items
+- `GET /file/download-shared-with-me`: download shared-with-me items
+- `GET /file/download-shared-by-me`: download shared-by-me items
+
+## Project Images
+
+Current repository image assets (file-type icons):
+
+| Icon | Preview |
+|---|---|
+| Attach File | ![Attach File](public/images/icon/attach-file.png) |
+| Audio | ![Audio](public/images/icon/audio.png) |
+| Excel | ![Excel](public/images/icon/excel.png) |
+| Image | ![Image](public/images/icon/image.png) |
+| PDF | ![PDF](public/images/icon/pdf.png) |
+| Text File | ![Text File](public/images/icon/txt-file.png) |
+| Video | ![Video](public/images/icon/video.png) |
+| Word | ![Word](public/images/icon/word.png) |
+| ZIP | ![ZIP](public/images/icon/zip.png) |
+
+If you want UI screenshots (dashboard, file list, share modal, trash, etc.) displayed in this README, add image files under a folder like `docs/screenshots/` and reference them in this section.
+
+## Testing
+
+Run PHP tests:
+
+```bash
+php artisan test
+```
+
+Or with Sail:
+
+```bash
+./vendor/bin/sail test
+```
+
+## Troubleshooting
+
+- `SQLSTATE[HY000] [2002]`: verify `DB_HOST`, port, and container/db service health.
+- Missing uploaded file links: run `php artisan storage:link`.
+- Share email not sent locally: ensure `MAIL_HOST`, `MAIL_PORT`, and mail service are correct.
+- Queue jobs not processing: run `php artisan queue:work` when using async queue drivers.
+- Frontend changes not reflecting: restart `npm run dev` and clear cache:
+
+```bash
+php artisan optimize:clear
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
