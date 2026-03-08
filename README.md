@@ -245,31 +245,26 @@ Authenticated file manager routes (see `routes/web.php`):
 	<p><em>Main file manager views from the Laravel + Vue app</em></p>
 </div>
 
-<table>
-	<tr>
-		<td align="center" width="50%">
-			<b>Home</b><br/>
-			<a href="screenshots/home.png">
+<div class="py-1">
+   <b>Home</b><br/>
+	<a href="screenshots/home.png">
 				<img src="screenshots/home.png" alt="My Files - List View" width="100%" />
-			</a>
-		</td>
-		<td align="center" width="50%">
-			<b>Inside Folder</b><br/>
+	</a>
+</div>
+
+<div class="py-1">
+   <b>Inside Folder</b><br/>
 			<a href="screenshots/home_inside_folder.png">
 				<img src="screenshots/home_inside_folder.png" alt="My Files - Folder View" width="100%" />
 			</a>
-		</td>
-	</tr>
-	<tr>
-		<td align="center" colspan="2">
-			<b>Trash</b><br/>
-			<a href="screenshots/trash.png">
-				<img src="screenshots/trash.png" alt="Trash View" width="85%" />
-			</a>
-		</td>
-	</tr>
-</table>
+</div>
 
+<div class="py-1">
+   <b>Trash</b><br/>
+		<a href="screenshots/trash.png">
+			<img src="screenshots/trash.png" alt="Trash View" width="100%" />
+	    </a>
+</div>
 
 ### File Type Icons
 
